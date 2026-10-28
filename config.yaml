@@ -1,0 +1,276 @@
+# ---------------------------------------------------------------
+# Opportunity Scout - configuration
+# Edit this file to add sources, change keywords, or tune scoring.
+# ---------------------------------------------------------------
+
+settings:
+  min_score: 25            # items below this score are dropped
+  closing_soon_days: 14    # "closing soon" window
+  max_deep_fetch: 60       # max pages opened per run to read deadlines
+  request_delay: 1.0       # seconds between page requests (be polite)
+  drop_expired: true
+  max_age_days: 45         # ignore feed posts older than this
+
+# --- 1. RSS / Atom feeds from opportunity sites ---------------------------
+# If a feed breaks, the run log says so. Fix the URL or set enabled: false.
+feeds:
+  - {name: Opportunity Desk,        url: "https://opportunitydesk.org/feed/",                weight: 1.0}
+  - {name: Opportunities for Africans, url: "https://www.opportunitiesforafricans.com/feed/", weight: 1.0}
+  - {name: Scholars4Dev,            url: "https://www.scholars4dev.com/feed/",               weight: 1.0}
+  - {name: After School Africa,     url: "https://www.afterschoolafrica.com/feed/",          weight: 1.0}
+  - {name: YouthOp,                 url: "https://youthop.com/feed",                         weight: 0.9}
+  - {name: Scholarship Positions,   url: "https://scholarship-positions.com/feed/",          weight: 0.9}
+  - {name: Class Central,           url: "https://www.classcentral.com/report/feed/",        weight: 0.8}
+
+# --- 2. Search-driven discovery via Google News RSS -----------------------
+# Each query is run every day. Add your own lines freely.
+google_news:
+  enabled: true
+  when: 14d
+  region: {hl: "en-NG", gl: "NG", ceid: "NG:en"}
+  queries:
+    - political science internship Africa
+    - political science graduate fellowship applications open
+    - fully funded masters public policy Nigerian students
+    - fully funded scholarship international relations
+    - governance fellowship Africa call for applications
+    - democracy elections fellowship young Africans
+    - free online course political science certificate
+    - free public policy course certificate
+    - research writing course free certificate
+    - academic writing course free certificate
+    - research methods free online course certificate
+    - data analysis social science free course
+    - MOOC international relations free
+    - peace and conflict studies free course
+    - UN internship applications open
+    - think tank internship remote
+    - research assistant opening political science remote
+    - graduate trainee programme Nigeria applications
+    - essay competition youth Nigeria
+    - call for papers political science
+    - Chevening Commonwealth scholarship applications
+    - Mastercard Foundation scholars programme applications
+    - DAAD public policy governance scholarship
+    - young African leaders fellowship applications
+
+# --- 3. Any web page that lists opportunities (optional) -------------------
+# link_selector: CSS selector that matches the <a> tags to collect.
+html_pages:
+  - name: Example (turn on and edit)
+    enabled: false
+    url: "https://example.org/opportunities"
+    link_selector: "article h2 a"
+    weight: 1.0
+
+# --- 4. Scoring vocabulary -------------------------------------------------
+# An item must contain at least one opportunity term.
+opportunity_terms:
+  - internship
+  - intern
+  - fellowship
+  - scholarship
+  - bursary
+  - grant
+  - traineeship
+  - trainee
+  - call for applications
+  - call for application
+  - applications open
+  - application open
+  - apply now
+  - apply for
+  - vacancy
+  - vacancies
+  - recruitment
+  - job opening
+  - opening
+  - course
+  - mooc
+  - certificate
+  - certification
+  - programme
+  - program
+  - training
+  - bootcamp
+  - essay competition
+  - call for papers
+  - writing competition
+  - award
+
+# Order matters: the first category that matches wins.
+categories:
+  - name: Scholarship / Funded study
+    terms: [scholarship, fully funded, bursary, "master's", masters, msc, ma degree, phd, chevening, commonwealth, daad]
+  - name: Fellowship
+    terms: [fellowship, fellows]
+  - name: Internship / Trainee
+    terms: [internship, intern, traineeship, trainee, graduate programme, graduate program]
+  - name: Course / MOOC / Certificate
+    terms: [mooc, online course, free course, certificate, certification, bootcamp, short course, training, coursera, edx, futurelearn, class central]
+  - name: Competition / Call for papers
+    terms: [essay competition, writing competition, call for papers, call for abstracts, award, prize, contest]
+  - name: Job / Opening
+    terms: [vacancy, vacancies, job, recruitment, hiring, opening, research assistant, analyst]
+
+# Political science and adjacent fields (term: weight). Relevance is capped at 45.
+relevance_terms:
+  political science: 14
+  politics: 6
+  international relations: 14
+  public policy: 12
+  public administration: 11
+  governance: 10
+  democracy: 9
+  democratic: 6
+  election: 9
+  electoral: 9
+  civic: 7
+  human rights: 8
+  peacebuilding: 9
+  peace and conflict: 9
+  conflict resolution: 8
+  security studies: 8
+  diplomacy: 9
+  foreign policy: 9
+  development studies: 8
+  policy analysis: 10
+  policy research: 10
+  think tank: 8
+  social science: 9
+  social sciences: 9
+  social scientist: 9
+  social scientists: 9
+  humanities: 5
+  law and politics: 8
+  anti-corruption: 8
+  transparency: 5
+  advocacy: 4
+  african studies: 8
+  comparative politics: 12
+  political economy: 12
+  research methods: 10
+  qualitative: 5
+  quantitative: 4
+  survey research: 5
+  open to all disciplines: 8
+  all disciplines: 8
+  any discipline: 8
+  all fields: 8
+  "all backgrounds": 5
+
+# Research-writing and academic-skills interest gets an extra boost + tag
+research_writing_terms:
+  - research writing
+  - academic writing
+  - scientific writing
+  - policy writing
+  - policy brief
+  - grant writing
+  - writing for publication
+  - research proposal
+  - thesis writing
+  - literature review
+  - research methods
+  - citation
+  - publishing
+  - op-ed
+  - journal article
+research_writing_boost: 14
+
+free_positive:
+  fully funded: 14
+  fully-funded: 14
+  free of charge: 12
+  free online: 10
+  free course: 12
+  free certificate: 14
+  free: 5
+  no application fee: 8
+  no fee: 8
+  stipend: 8
+  scholarship: 6
+  full tuition: 8
+  financial aid: 6
+  audit for free: 8
+
+# Paid / restricted signals (term: penalty)
+paid_negative:
+  tuition fee: 8
+  application fee: 8
+  registration fee: 8
+  pay to: 8
+  paid course: 10
+  enrol for $: 10
+  early bird: 6
+  buy: 4
+
+eligibility_positive:
+  nigeria: 12
+  nigerian: 12
+  africa: 8
+  african: 8
+  developing countries: 8
+  low and middle income: 6
+  international students: 7
+  all nationalities: 8
+  all countries: 6
+  worldwide: 5
+  global south: 6
+  online: 4
+  remote: 4
+  virtual: 3
+
+eligibility_negative:
+  "u.s. citizens only": 40
+  "us citizens only": 40
+  "american citizens": 30
+  "eu citizens only": 35
+  "uk citizens only": 35
+  "uk residents only": 35
+  "residents of": 12
+  "must be a resident": 25
+  "permanent residents only": 30
+  "canadian citizens": 30
+  "citizens of the united states": 35
+  "indian citizens only": 40
+  "kenyan citizens only": 35
+  "ghanaian citizens only": 35
+  "south african citizens": 35
+
+level_positive:
+  graduate: 5
+  graduates: 5
+  bachelor: 4
+  first class: 6
+  first-class: 6
+  recent graduate: 6
+  masters: 4
+  "master's": 4
+  early career: 6
+  young professionals: 5
+  youth: 3
+
+level_negative:
+  postdoctoral: 25
+  postdoc: 25
+  "senior level": 20
+  "10 years": 20
+  "5+ years": 15
+  "mid-career": 15
+  "phd required": 15
+  "high school": 25
+  "secondary school": 25
+  undergraduate students only: 15
+
+# Obvious noise: if the title contains any of these, drop it.
+title_blocklist:
+  - webinar recording
+  - lottery
+  - visa lottery
+  - loan
+  - forex
+  - crypto
+  - nursing
+  - pharmacy
+  - engineering only
